@@ -18,7 +18,7 @@ public class User {
 
     String email;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "lectures_participants")
     Set<Lecture> lectures;
 

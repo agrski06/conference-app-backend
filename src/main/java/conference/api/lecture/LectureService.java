@@ -4,18 +4,23 @@ import conference.Conference;
 import conference.api.lecture.DTOs.LectureInfoDTO;
 import conference.api.lecture.DTOs.RegisterUserRequest;
 import conference.api.lecture.DTOs.ScheduleDTO;
+import conference.api.user.User;
+import conference.api.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LectureService implements ILectureService {
 
     private final LectureRepository lectureRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ScheduleDTO getSchedule() {
@@ -50,7 +55,19 @@ public class LectureService implements ILectureService {
 
     @Override
     public Set<LectureInfoDTO> getLecturesForUser(String login) {
-        return null;
+        Optional<User> user = userRepository.findByLogin(login);
+
+        return user.map(value -> value.getLectures().stream()
+                        .map(lecture -> new LectureInfoDTO(
+                        lecture.getId(),
+                        lecture.getName(),
+                        lecture.getLecturer(),
+                        lecture.getStartDate(),
+                        lecture.getEndDate(),
+                        lecture.getTopic(),
+                        lecture.getParticipants().size()))
+                .collect(Collectors.toSet()))
+                .orElse(null);
     }
 
     @Override
