@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "users")
+@Table(name = "users") // USER is a keyword in H2
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
