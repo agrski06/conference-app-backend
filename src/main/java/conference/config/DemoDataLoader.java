@@ -1,5 +1,6 @@
 package conference.config;
 
+import conference.Conference;
 import conference.api.lecture.Lecture;
 import conference.api.lecture.LectureRepository;
 import conference.api.lecture.Topic;
@@ -19,14 +20,14 @@ public class DemoDataLoader {
 
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
-        Timestamp firstLectureStartDate = Timestamp.valueOf("2023-06-01 10:00:00");
-        Timestamp firstLectureEndDate = Timestamp.valueOf("2023-06-01 11:45:00");
+        Timestamp firstLectureStartDate = Conference.firstLectureStartDate;
+        Timestamp firstLectureEndDate = Conference.firstLectureEndDate;
 
-        Timestamp secondLectureStartDate = Timestamp.valueOf("2023-06-01 12:00:00");
-        Timestamp secondLectureEndDate = Timestamp.valueOf("2023-06-01 13:45:00");
+        Timestamp secondLectureStartDate = Conference.secondLectureStartDate;
+        Timestamp secondLectureEndDate = Conference.secondLectureEndDate;
 
-        Timestamp thirdLectureStartDate = Timestamp.valueOf("2023-06-01 14:00:00");
-        Timestamp thirdLectureEndDate = Timestamp.valueOf("2023-06-01 15:45:00");
+        Timestamp thirdLectureStartDate = Conference.thirdLectureStartDate;
+        Timestamp thirdLectureEndDate = Conference.thirdLectureEndDate;
 
         lectureRepository.save(new Lecture(null, "Responsive web design", "John Smith", firstLectureStartDate, firstLectureEndDate, Topic.FRONTEND, new HashSet<>()));
         lectureRepository.save(new Lecture(null, "Introduction to TypeScript", "Jan Kowalski", secondLectureStartDate, secondLectureEndDate, Topic.FRONTEND, new HashSet<>()));
