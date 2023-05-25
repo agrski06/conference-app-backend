@@ -1,7 +1,10 @@
 package conference.api.user;
 
+import conference.api.lecture.Lecture;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.Set;
 
 @Entity
 @Data
@@ -14,5 +17,9 @@ public class User {
     String login;
 
     String email;
+
+    @ManyToMany
+    @JoinTable(name = "lectures_participants")
+    Set<Lecture> lectures;
 
 }

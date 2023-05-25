@@ -1,10 +1,10 @@
 package conference.api.lecture;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import conference.api.user.User;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.Set;
 
 @Entity
 @Data
@@ -14,5 +14,11 @@ public class Lecture {
     private Long id;
 
     String name;
+
+    @Enumerated(EnumType.STRING)
+    Topic topic;
+
+    @ManyToMany(mappedBy = "lectures")
+    Set<User> participants;
 
 }
