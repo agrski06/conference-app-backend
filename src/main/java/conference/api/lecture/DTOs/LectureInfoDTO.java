@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Data
 public class LectureInfoDTO {
+    long id;
     String name;
     String lecturer;
     Timestamp startDate;

@@ -2,6 +2,7 @@ package conference.api.lecture;
 
 import conference.Conference;
 import conference.api.lecture.DTOs.LectureInfoDTO;
+import conference.api.lecture.DTOs.RegisterUserRequest;
 import conference.api.lecture.DTOs.ScheduleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,9 @@ public class LectureService implements ILectureService {
         Set<LectureInfoDTO> thirdBlock = new HashSet<>();
 
         lectures.forEach(lecture -> {
-            LectureInfoDTO lectureInfoDTO = new LectureInfoDTO(lecture.getName(),
+            LectureInfoDTO lectureInfoDTO = new LectureInfoDTO(
+                    lecture.getId(),
+                    lecture.getName(),
                     lecture.getLecturer(),
                     lecture.getStartDate(),
                     lecture.getEndDate(),
@@ -45,4 +48,13 @@ public class LectureService implements ILectureService {
         return new ScheduleDTO(firstBlock, secondBlock, thirdBlock);
     }
 
+    @Override
+    public Set<LectureInfoDTO> getLecturesForUser(String login) {
+        return null;
+    }
+
+    @Override
+    public boolean registerUserForLecture(RegisterUserRequest request) {
+        return false;
+    }
 }
