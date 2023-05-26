@@ -25,7 +25,7 @@ public class Lecture {
 
     private Topic topic;
 
-    private Set<Integer> participants = new HashSet<>();
+    private Set<Long> participants = new HashSet<>();
 
     public Lecture(Long id, String name, String lecturer, Timestamp startDate, Timestamp endDate, Topic topic) {
         this.id = id;

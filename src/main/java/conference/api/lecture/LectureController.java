@@ -1,14 +1,12 @@
 package conference.api.lecture;
 
 import conference.api.lecture.DTOs.LectureInfoDTO;
+import conference.api.lecture.DTOs.RegisterUserForLectureRequest;
 import conference.api.lecture.DTOs.ScheduleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -32,6 +30,11 @@ public class LectureController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with given login not found");
 
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUserForLecture(@RequestBody RegisterUserForLectureRequest request) {
+        return ResponseEntity.ok(lectureService.registerUserForLecture(request));
     }
 
 }

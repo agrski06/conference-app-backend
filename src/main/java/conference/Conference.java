@@ -24,21 +24,21 @@ public class Conference {
     private final List<Lecture> lectures = new ArrayList<>();
 
     public Conference() {
-        lectures.add(new Lecture(1L, "Responsive web design", "John Smith", firstLectureStartDate, firstLectureEndDate, Topic.FRONTEND));
-        lectures.add(new Lecture(2L, "Introduction to TypeScript", "Jan Kowalski", secondLectureStartDate, secondLectureEndDate, Topic.FRONTEND));
-        lectures.add(new Lecture(3L, "Frontend frameworks - Vue.js, Angular", "Anna Nowak", thirdLectureStartDate, thirdLectureEndDate, Topic.FRONTEND));
+        lectures.add(new Lecture(0L, "Responsive web design", "John Smith", firstLectureStartDate, firstLectureEndDate, Topic.FRONTEND));
+        lectures.add(new Lecture(1L, "Introduction to TypeScript", "Jan Kowalski", secondLectureStartDate, secondLectureEndDate, Topic.FRONTEND));
+        lectures.add(new Lecture(2L, "Frontend frameworks - Vue.js, Angular", "Anna Nowak", thirdLectureStartDate, thirdLectureEndDate, Topic.FRONTEND));
 
-        lectures.add(new Lecture(4L, "Basics of microservices", "Katarzyna Czyk", firstLectureStartDate, firstLectureEndDate, Topic.BACKEND));
-        lectures.add(new Lecture(5L, "Understanding Spring annotations", "John Smith", secondLectureStartDate, secondLectureEndDate, Topic.BACKEND));
-        lectures.add(new Lecture(6L, "Comparison of .NET and Spring", "Adam Nowak", thirdLectureStartDate, thirdLectureEndDate, Topic.BACKEND));
+        lectures.add(new Lecture(3L, "Basics of microservices", "Katarzyna Czyk", firstLectureStartDate, firstLectureEndDate, Topic.BACKEND));
+        lectures.add(new Lecture(4L, "Understanding Spring annotations", "John Smith", secondLectureStartDate, secondLectureEndDate, Topic.BACKEND));
+        lectures.add(new Lecture(5L, "Comparison of .NET and Spring", "Adam Nowak", thirdLectureStartDate, thirdLectureEndDate, Topic.BACKEND));
 
-        lectures.add(new Lecture(7L, "NoSQL introduction - MongoDB", "Adam Nowak", firstLectureStartDate, firstLectureEndDate, Topic.DATABASE));
-        lectures.add(new Lecture(8L, "Indexing - what's that?", "Katarzyna Czyk", secondLectureStartDate, secondLectureEndDate, Topic.DATABASE));
-        lectures.add(new Lecture(9L, "Advanced SQL", "Jan Kowalski", thirdLectureStartDate, thirdLectureEndDate, Topic.DATABASE));
+        lectures.add(new Lecture(6L, "NoSQL introduction - MongoDB", "Adam Nowak", firstLectureStartDate, firstLectureEndDate, Topic.DATABASE));
+        lectures.add(new Lecture(7L, "Indexing - what's that?", "Katarzyna Czyk", secondLectureStartDate, secondLectureEndDate, Topic.DATABASE));
+        lectures.add(new Lecture(8L, "Advanced SQL", "Jan Kowalski", thirdLectureStartDate, thirdLectureEndDate, Topic.DATABASE));
 
-        lectures.add(new Lecture(10L, "Infrastructure as code", "Adam Nowak", firstLectureStartDate, firstLectureEndDate, Topic.DEVOPS));
-        lectures.add(new Lecture(11L, "Preventing security vulnerabilities", "John Smith", secondLectureStartDate, secondLectureEndDate, Topic.DEVOPS));
-        lectures.add(new Lecture(12L, "Optimized toolchains", "Anna Nowak", thirdLectureStartDate, thirdLectureEndDate, Topic.DEVOPS));
+        lectures.add(new Lecture(9L, "Infrastructure as code", "Adam Nowak", firstLectureStartDate, firstLectureEndDate, Topic.DEVOPS));
+        lectures.add(new Lecture(10L, "Preventing security vulnerabilities", "John Smith", secondLectureStartDate, secondLectureEndDate, Topic.DEVOPS));
+        lectures.add(new Lecture(11L, "Optimized toolchains", "Anna Nowak", thirdLectureStartDate, thirdLectureEndDate, Topic.DEVOPS));
     }
 
 }

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,6 +26,6 @@ public class User {
             name = "NUMBER",
             joinColumns = @JoinColumn(name="LECTURE_ID")
     )
-    private Set<Integer> lectures;
+    private List<Long> lectures;
 
 }

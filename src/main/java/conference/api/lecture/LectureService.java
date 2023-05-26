@@ -2,12 +2,15 @@ package conference.api.lecture;
 
 import conference.Conference;
 import conference.api.lecture.DTOs.LectureInfoDTO;
-import conference.api.lecture.DTOs.RegisterUserRequest;
+import conference.api.lecture.DTOs.RegisterUserForLectureRequest;
 import conference.api.lecture.DTOs.ScheduleDTO;
 import conference.api.user.User;
 import conference.api.user.UserRepository;
+import conference.api.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,6 +21,7 @@ public class LectureService implements ILectureService {
 
     private final UserRepository userRepository;
     private final LectureRepository lectureRepository;
+    private final UserService userService;
 
     @Override
     public ScheduleDTO getSchedule() {
@@ -65,7 +69,18 @@ public class LectureService implements ILectureService {
     }
 
     @Override
-    public boolean registerUserForLecture(RegisterUserRequest request) {
-        return false;
+    public boolean registerUserForLecture(RegisterUserForLectureRequest request) {
+        User user = userService.registerUser(request.getLogin(), request.getEmail());
+        Lecture lecture = lectureRepository.findById(request.getLectureId());
+
+        // if user already registered to lecture
+        if (user.getLectures().contains(request.getLectureId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already registered for this lecture");
+        }
+
+        user.getLectures().add(lecture.getId());
+        lecture.getParticipants().add(user.getId());
+        userRepository.save(user);
+        return true;
     }
 }

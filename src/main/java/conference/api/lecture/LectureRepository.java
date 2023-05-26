@@ -17,7 +17,7 @@ public class LectureRepository {
     }
 
     public Lecture findById(long id) {
-        return conference.getLectures().get((int) id);
+        return conference.getLectures().stream().filter(lecture -> lecture.getId() == id).findFirst().get();
     }
 
 }
