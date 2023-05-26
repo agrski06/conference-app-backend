@@ -24,16 +24,14 @@ public class UserService implements IUserService {
         Optional<User> userFoundByLogin = userRepository.findByLogin(login);
         Optional<User> userFoundByEmail = userRepository.findByEmail(email.toLowerCase());
 
-        // this looks... it works
         if (userFoundByLogin.isPresent()) {
             if (!userFoundByLogin.get().getEmail().equals(email.toLowerCase())) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Provided email doesn't match the login");
             }
-            if (userFoundByEmail.isPresent()) {
-                if (!userFoundByLogin.get().getEmail().equals(userFoundByEmail.get().getEmail())) {
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
-                }
-            }
+        }
+
+        if (userFoundByEmail.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
         }
 
         return userFoundByLogin.orElseGet(() -> new User(null, login, email.toLowerCase(), new ArrayList<>()));
