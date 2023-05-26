@@ -78,6 +78,11 @@ public class LectureService implements ILectureService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already registered for this lecture");
         }
 
+        // check capacity
+        if (lecture.getParticipants().size() >= 5) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Capacity of 5 participants reached");
+        }
+
         user.getLectures().add(lecture.getId());
         lecture.getParticipants().add(user.getId());
         userRepository.save(user);

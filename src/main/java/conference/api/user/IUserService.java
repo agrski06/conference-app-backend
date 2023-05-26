@@ -1,5 +1,9 @@
 package conference.api.user;
 
+import conference.api.user.DTOs.UserInfoDTO;
+
+import java.util.Set;
+
 public interface IUserService {
 
     /**
@@ -9,4 +13,6 @@ public interface IUserService {
      * user from database
      */
     User registerUser(String login, String email);
+
+    Set<UserInfoDTO> getAllUsers();
 }

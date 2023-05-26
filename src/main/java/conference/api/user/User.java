@@ -21,10 +21,11 @@ public class User {
 
     private String email;
 
+    // store IDs of Lectures in database
     @ElementCollection
     @CollectionTable(
-            name = "NUMBER",
-            joinColumns = @JoinColumn(name="LECTURE_ID")
+            name = "PARTICIPANTS",
+            joinColumns = @JoinColumn(name="USER_ID")
     )
     private List<Long> lectures;
 
