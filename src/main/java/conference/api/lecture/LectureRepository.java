@@ -20,4 +20,10 @@ public class LectureRepository {
         return conference.getLectures().stream().filter(lecture -> lecture.getId() == id).findFirst().get();
     }
 
+    public void addParticipantToLecture(long lectureId, long userId) {
+        conference.getLectures().stream()
+                .filter(lecture -> lecture.getId() == lectureId)
+                .forEach(lecture -> lecture.getParticipants().add(userId));
+    }
+
 }

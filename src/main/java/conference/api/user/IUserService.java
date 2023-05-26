@@ -10,8 +10,8 @@ public interface IUserService {
 
     /**
      * This method is used for internal user registration (during registering for lecture)
-     * @param login - user login
-     * @param email - user email
+     * @param login user login
+     * @param email user email
      * @return Returns new User object if user with given login has not been found in the database. Otherwise, returns
      * user from database
      */
@@ -19,11 +19,16 @@ public interface IUserService {
 
     /**
      * This method is used for user registration by endpoint
-     * @param request - contains login and email
+     * @param request contains login and email
      * @return UserInfoDTO - basic info about user
      */
     UserInfoDTO registerUser(RegisterUserRequest request);
 
+    /**
+     * Used for updating user
+     * @param request contains login and email
+     * @return UserInfoDTO - basic info about user
+     */
     UserInfoDTO updateUser(UpdateUserRequest request);
 
     Set<UserInfoDTO> getAllUsers();

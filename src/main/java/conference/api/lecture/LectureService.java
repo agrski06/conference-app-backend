@@ -70,6 +70,8 @@ public class LectureService implements ILectureService {
 
     @Override
     public boolean registerUserForLecture(RegisterUserForLectureRequest request) {
+        //TODO: registerUser method is not needed, just move all logic here
+
         User user = userService.registerUser(request.getLogin(), request.getEmail());
         Lecture lecture = lectureRepository.findById(request.getLectureId());
 
@@ -85,11 +87,12 @@ public class LectureService implements ILectureService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Capacity of 5 participants reached");
         }
 
+        //TODO: check if user is able to register for lecture (can't register to two lectures in the same time block)
         //TODO: send confirmation email
 
         user.getLectures().add(lecture.getId());
-        lecture.getParticipants().add(user.getId());
         userRepository.save(user);
+        lectureRepository.addParticipantToLecture(lecture.getId(), user.getId());
         return true;
     }
 }
