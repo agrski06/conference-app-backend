@@ -1,6 +1,7 @@
 package conference.api.user;
 
 import conference.api.user.DTOs.RegisterUserRequest;
+import conference.api.user.DTOs.UpdateUserRequest;
 import conference.api.user.DTOs.UserInfoDTO;
 
 import java.util.Set;
@@ -22,6 +23,8 @@ public interface IUserService {
      * @return UserInfoDTO - basic info about user
      */
     UserInfoDTO registerUser(RegisterUserRequest request);
+
+    UserInfoDTO updateUser(UpdateUserRequest request);
 
     Set<UserInfoDTO> getAllUsers();
 }

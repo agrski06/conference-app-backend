@@ -1,6 +1,7 @@
 package conference.api.user;
 
 import conference.api.user.DTOs.RegisterUserRequest;
+import conference.api.user.DTOs.UpdateUserRequest;
 import conference.api.user.DTOs.UserInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,21 @@ public class UserService implements IUserService {
 
         return new UserInfoDTO(savedUser);
 
+    }
+
+    @Override
+    public UserInfoDTO updateUser(UpdateUserRequest request) {
+        Optional<User> user = userRepository.findByLogin(request.getLogin());
+
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with given login not found");
+        }
+
+        User updatedUser = user.get();
+        updatedUser.setEmail(request.getEmail().toLowerCase());
+        updatedUser = userRepository.save(updatedUser);
+
+        return new UserInfoDTO(updatedUser);
     }
 
     @Override

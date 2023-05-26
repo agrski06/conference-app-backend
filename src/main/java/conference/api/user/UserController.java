@@ -1,6 +1,7 @@
 package conference.api.user;
 
 import conference.api.user.DTOs.RegisterUserRequest;
+import conference.api.user.DTOs.UpdateUserRequest;
 import conference.api.user.DTOs.UserInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,4 +25,10 @@ public class UserController {
     public ResponseEntity<UserInfoDTO> registerUser(@RequestBody RegisterUserRequest request) {
         return ResponseEntity.ok(userService.registerUser(request));
     }
+
+    @PutMapping
+    public ResponseEntity<UserInfoDTO> updateUser(@RequestBody UpdateUserRequest request) {
+        return ResponseEntity.ok(userService.updateUser(request));
+    }
+
 }
