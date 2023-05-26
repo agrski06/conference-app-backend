@@ -7,6 +7,7 @@ import conference.api.lecture.DTOs.ScheduleDTO;
 import conference.api.user.User;
 import conference.api.user.UserRepository;
 import conference.api.user.UserService;
+import conference.mail.IMailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class LectureService implements ILectureService {
     private final UserRepository userRepository;
     private final LectureRepository lectureRepository;
     private final UserService userService;
+    private final IMailSender mailSender;
 
     @Override
     public ScheduleDTO getSchedule() {
@@ -74,8 +76,6 @@ public class LectureService implements ILectureService {
 
         Lecture lecture = lectureRepository.findById(request.getLectureId());
 
-        //TODO: check (somewhere) if user with given login exists
-
         // if user already registered to lecture
         if (user.getLectures().contains(request.getLectureId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already registered for this lecture");
@@ -87,11 +87,12 @@ public class LectureService implements ILectureService {
         }
 
         //TODO: check if user is able to register for lecture (can't register to two lectures in the same time block)
-        //TODO: send confirmation email
 
         user.getLectures().add(lecture.getId());
         userRepository.save(user);
         lectureRepository.addParticipantToLecture(lecture.getId(), user.getId());
+        mailSender.sendRegisteredNotification(request.getEmail(), lecture);
+
         return true;
     }
 }
