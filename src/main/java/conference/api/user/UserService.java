@@ -21,33 +21,44 @@ public class UserService implements IUserService {
 
     @Override
     public User registerUser(String login, String email) {
-        Optional<User> userInRepo = userRepository.findByLogin(login);
+        Optional<User> userFoundByLogin = userRepository.findByLogin(login);
+        Optional<User> userFoundByEmail = userRepository.findByEmail(email.toLowerCase());
 
-        if (userInRepo.isPresent()) {
-            if (!userInRepo.get().getEmail().equals(email.toLowerCase())) {
+        // this looks... it works
+        if (userFoundByLogin.isPresent()) {
+            if (!userFoundByLogin.get().getEmail().equals(email.toLowerCase())) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Provided email doesn't match the login");
+            }
+            if (userFoundByEmail.isPresent()) {
+                if (!userFoundByLogin.get().getEmail().equals(userFoundByEmail.get().getEmail())) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+                }
             }
         }
 
-        return userInRepo.orElseGet(() -> new User(null, login, email.toLowerCase(), new ArrayList<>()));
+        return userFoundByLogin.orElseGet(() -> new User(null, login, email.toLowerCase(), new ArrayList<>()));
     }
 
     @Override
     public UserInfoDTO registerUser(RegisterUserRequest request) {
-        Optional<User> user = userRepository.findByLogin(request.getLogin());
+        Optional<User> userFoundByLogin = userRepository.findByLogin(request.getLogin());
+        Optional<User> userFoundByEmail = userRepository.findByEmail(request.getEmail().toLowerCase());
 
         // check if email is the same as in database
-        if (user.isPresent()) {
-            if (user.get().getEmail().equals(request.getEmail().toLowerCase()))
+        if (userFoundByLogin.isPresent()) {
+            if (userFoundByLogin.get().getEmail().equals(request.getEmail().toLowerCase()))
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "User already registered");
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Login already in use");
+        }
+
+        if (userFoundByEmail.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
         }
 
         User savedUser = userRepository.save(
                 new User(null, request.getLogin(), request.getEmail().toLowerCase(), new ArrayList<>()));
 
         return new UserInfoDTO(savedUser);
-
     }
 
     @Override
