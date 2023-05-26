@@ -63,13 +63,19 @@ public class UserService implements IUserService {
 
     @Override
     public UserInfoDTO updateUser(UpdateUserRequest request) {
-        Optional<User> user = userRepository.findByLogin(request.getLogin());
+        Optional<User> userFoundByLogin = userRepository.findByLogin(request.getLogin());
+        Optional<User> userFoundByEmail = userRepository.findByEmail(request.getEmail().toLowerCase());
 
-        if (user.isEmpty()) {
+        if (userFoundByLogin.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with given login not found");
         }
 
-        User updatedUser = user.get();
+        if (userFoundByEmail.isPresent()) {
+            if (!userFoundByEmail.get().getLogin().equals(userFoundByLogin.get().getLogin()))
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+        }
+
+        User updatedUser = userFoundByLogin.get();
         updatedUser.setEmail(request.getEmail().toLowerCase());
         updatedUser = userRepository.save(updatedUser);
 
