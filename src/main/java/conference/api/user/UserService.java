@@ -21,10 +21,15 @@ public class UserService implements IUserService {
 
     @Override
     public User registerUser(String login, String email) {
-        Optional<User> user = userRepository.findByLogin(login);
+        Optional<User> userInRepo = userRepository.findByLogin(login);
 
-        // login might be taken, check in call whether the emails match
-        return user.orElseGet(() -> new User(null, login, email.toLowerCase(), new ArrayList<>()));
+        if (userInRepo.isPresent()) {
+            if (!userInRepo.get().getEmail().equals(email.toLowerCase())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Provided email doesn't match the login");
+            }
+        }
+
+        return userInRepo.orElseGet(() -> new User(null, login, email.toLowerCase(), new ArrayList<>()));
     }
 
     @Override

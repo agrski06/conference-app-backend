@@ -70,9 +70,8 @@ public class LectureService implements ILectureService {
 
     @Override
     public boolean registerUserForLecture(RegisterUserForLectureRequest request) {
-        //TODO: registerUser method is not needed, just move all logic here
-
         User user = userService.registerUser(request.getLogin(), request.getEmail());
+
         Lecture lecture = lectureRepository.findById(request.getLectureId());
 
         //TODO: check (somewhere) if user with given login exists
