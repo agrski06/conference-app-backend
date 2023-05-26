@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/lecture")
@@ -26,8 +26,8 @@ public class LectureController {
     }
 
     @GetMapping("/{login}")
-    public ResponseEntity<Set<LectureInfoDTO>> getLecturesForUser(@PathVariable String login) {
-        Set<LectureInfoDTO> result = lectureService.getLecturesForUser(login);
+    public ResponseEntity<List<LectureInfoDTO>> getLecturesForUser(@PathVariable String login) {
+        List<LectureInfoDTO> result = lectureService.getLecturesForUser(login);
         if (result == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with given login not found");
 

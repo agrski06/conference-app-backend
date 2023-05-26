@@ -1,35 +1,38 @@
 package conference.api.lecture;
 
-import conference.api.user.User;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Lecture {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
-    String name;
+    private String name;
 
-    String lecturer;
+    private String lecturer;
 
-    Timestamp startDate;
+    private Timestamp startDate;
 
-    Timestamp endDate;
+    private Timestamp endDate;
 
-    @Enumerated(EnumType.STRING)
-    Topic topic;
+    private Topic topic;
 
-    @ManyToMany(mappedBy = "lectures")
-    Set<User> participants;
+    private Set<Integer> participants = new HashSet<>();
 
+    public Lecture(Long id, String name, String lecturer, Timestamp startDate, Timestamp endDate, Topic topic) {
+        this.id = id;
+        this.name = name;
+        this.lecturer = lecturer;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.topic = topic;
+    }
 }

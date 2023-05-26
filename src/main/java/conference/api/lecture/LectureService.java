@@ -9,18 +9,15 @@ import conference.api.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LectureService implements ILectureService {
 
-    private final LectureRepository lectureRepository;
     private final UserRepository userRepository;
+    private final LectureRepository lectureRepository;
 
     @Override
     public ScheduleDTO getSchedule() {
@@ -54,20 +51,17 @@ public class LectureService implements ILectureService {
     }
 
     @Override
-    public Set<LectureInfoDTO> getLecturesForUser(String login) {
+    public List<LectureInfoDTO> getLecturesForUser(String login) {
         Optional<User> user = userRepository.findByLogin(login);
 
-        return user.map(value -> value.getLectures().stream()
-                        .map(lecture -> new LectureInfoDTO(
-                        lecture.getId(),
-                        lecture.getName(),
-                        lecture.getLecturer(),
-                        lecture.getStartDate(),
-                        lecture.getEndDate(),
-                        lecture.getTopic(),
-                        lecture.getParticipants().size()))
-                .collect(Collectors.toSet()))
-                .orElse(null);
+        if (user.isEmpty())
+            return null;
+
+        List<Lecture> lectures = new ArrayList<>();
+        user.get().getLectures().forEach(lectureId
+                        -> lectures.add(lectureRepository.findById(lectureId)));
+
+        return lectures.stream().map(LectureInfoDTO::new).collect(Collectors.toList());
     }
 
     @Override

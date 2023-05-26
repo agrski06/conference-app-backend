@@ -1,9 +1,23 @@
 package conference.api.lecture;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import conference.Conference;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@Repository
-public interface LectureRepository extends JpaRepository<Lecture, Long> {
+import java.util.List;
+
+@RequiredArgsConstructor
+@Component
+public class LectureRepository {
+
+    private final Conference conference;
+
+    public List<Lecture> findAll() {
+        return conference.getLectures();
+    }
+
+    public Lecture findById(long id) {
+        return conference.getLectures().get((int) id);
+    }
 
 }

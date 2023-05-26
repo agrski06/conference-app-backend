@@ -1,6 +1,5 @@
 package conference.api.user;
 
-import conference.api.lecture.Lecture;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,12 +17,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    String login;
+    private String login;
 
-    String email;
+    private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "lectures_participants")
-    Set<Lecture> lectures;
+    @ElementCollection
+    @CollectionTable(
+            name = "NUMBER",
+            joinColumns = @JoinColumn(name="LECTURE_ID")
+    )
+    private Set<Integer> lectures;
 
 }

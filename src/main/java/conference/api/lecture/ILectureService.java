@@ -4,10 +4,10 @@ import conference.api.lecture.DTOs.LectureInfoDTO;
 import conference.api.lecture.DTOs.RegisterUserRequest;
 import conference.api.lecture.DTOs.ScheduleDTO;
 
-import java.util.Set;
+import java.util.List;
 
 public interface ILectureService {
     ScheduleDTO getSchedule();
-    Set<LectureInfoDTO> getLecturesForUser(String login);
+    List<LectureInfoDTO> getLecturesForUser(String login);
     boolean registerUserForLecture(RegisterUserRequest request);
 }
