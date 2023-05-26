@@ -73,6 +73,8 @@ public class LectureService implements ILectureService {
         User user = userService.registerUser(request.getLogin(), request.getEmail());
         Lecture lecture = lectureRepository.findById(request.getLectureId());
 
+        //TODO: check (somewhere) if user with given login exists
+
         // if user already registered to lecture
         if (user.getLectures().contains(request.getLectureId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already registered for this lecture");
@@ -82,6 +84,8 @@ public class LectureService implements ILectureService {
         if (lecture.getParticipants().size() >= 5) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Capacity of 5 participants reached");
         }
+
+        //TODO: send confirmation email
 
         user.getLectures().add(lecture.getId());
         lecture.getParticipants().add(user.getId());
