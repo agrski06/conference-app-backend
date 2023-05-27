@@ -34,14 +34,7 @@ public class LectureService implements ILectureService {
         Set<LectureInfoDTO> thirdBlock = new HashSet<>();
 
         lectures.forEach(lecture -> {
-            LectureInfoDTO lectureInfoDTO = new LectureInfoDTO(
-                    lecture.getId(),
-                    lecture.getName(),
-                    lecture.getLecturer(),
-                    lecture.getStartDate(),
-                    lecture.getEndDate(),
-                    lecture.getTopic(),
-                    lecture.getParticipants().size());
+            LectureInfoDTO lectureInfoDTO = new LectureInfoDTO(lecture);
             if (lecture.getStartDate().equals(Conference.firstLectureStartDate)) {
                 firstBlock.add(lectureInfoDTO);
             }

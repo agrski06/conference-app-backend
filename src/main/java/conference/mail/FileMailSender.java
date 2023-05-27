@@ -20,6 +20,9 @@ public class FileMailSender implements IMailSender {
                 notifications.delete();
             }
             notifications.createNewFile();
+            FileOutputStream writer = new FileOutputStream(notifications, true);
+            writer.write("============================================================================\n\n".getBytes());
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

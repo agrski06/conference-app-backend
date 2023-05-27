@@ -31,5 +31,7 @@ public interface IUserService {
      */
     UserInfoDTO updateUser(UpdateUserRequest request);
 
+    UserInfoDTO cancelReservationForLecture(long lectureId, String login);
+
     Set<UserInfoDTO> getAllUsers();
 }

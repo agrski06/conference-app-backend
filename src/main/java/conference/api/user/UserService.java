@@ -1,5 +1,7 @@
 package conference.api.user;
 
+import conference.api.lecture.Lecture;
+import conference.api.lecture.LectureRepository;
 import conference.api.user.DTOs.RegisterUserRequest;
 import conference.api.user.DTOs.UpdateUserRequest;
 import conference.api.user.DTOs.UserInfoDTO;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final LectureRepository lectureRepository;
 
     @Override
     public User registerUser(String login, String email) {
@@ -83,6 +87,26 @@ public class UserService implements IUserService {
         updatedUser = userRepository.save(updatedUser);
 
         return new UserInfoDTO(updatedUser);
+    }
+
+    @Override
+    public UserInfoDTO cancelReservationForLecture(long lectureId, String login) {
+        Optional<User> user = userRepository.findByLogin(login);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        Lecture lecture = lectureRepository.findById(lectureId);
+
+        if (user.get().getLectures().stream().noneMatch(userLecture -> Objects.equals(userLecture, lecture.getId()))) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User is not registered for this lecture");
+        }
+
+        user.get().getLectures().remove(lectureId);
+        User savedUser = userRepository.save(user.get());
+        lectureRepository.removeParticipantFromLecture(lectureId, user.get().getId());
+
+        return new UserInfoDTO(savedUser);
     }
 
     @Override

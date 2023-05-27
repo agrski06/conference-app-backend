@@ -31,4 +31,10 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(request));
     }
 
+    @DeleteMapping("/{login}/lecture/{lectureId}")
+    public ResponseEntity<UserInfoDTO> cancelReservationForLecture(@PathVariable String login,
+                                                                   @PathVariable long lectureId) {
+        return ResponseEntity.ok(userService.cancelReservationForLecture(lectureId, login));
+    }
+
 }
