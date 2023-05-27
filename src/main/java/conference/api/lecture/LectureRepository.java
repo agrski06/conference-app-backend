@@ -26,4 +26,14 @@ public class LectureRepository {
                 .forEach(lecture -> lecture.getParticipants().add(userId));
     }
 
+    public boolean areDatesOverlappingInclusive(Lecture lecture1, Lecture lecture2) {
+        return !lecture1.getStartDate().after(lecture2.getEndDate())
+                && !lecture2.getStartDate().after(lecture1.getEndDate());
+    }
+
+    public boolean areDatesOverlappingExclusive(Lecture lecture1, Lecture lecture2) {
+        return lecture1.getStartDate().before(lecture2.getEndDate())
+                && lecture2.getStartDate().before(lecture1.getEndDate());
+    }
+
 }

@@ -73,7 +73,6 @@ public class LectureService implements ILectureService {
     @Override
     public boolean registerUserForLecture(RegisterUserForLectureRequest request) {
         User user = userService.registerUser(request.getLogin(), request.getEmail());
-
         Lecture lecture = lectureRepository.findById(request.getLectureId());
 
         // if user already registered to lecture
@@ -86,7 +85,12 @@ public class LectureService implements ILectureService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Capacity of 5 participants reached");
         }
 
-        //TODO: check if user is able to register for lecture (can't register to two lectures in the same time block)
+        // check whether user is registered for another lecture at this time
+        if (user.getLectures().stream()
+                .map(lectureRepository::findById)
+                .anyMatch(userLecture -> lectureRepository.areDatesOverlappingInclusive(userLecture, lecture))) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "You are registered to another lecture at this time");
+        }
 
         user.getLectures().add(lecture.getId());
         userRepository.save(user);
