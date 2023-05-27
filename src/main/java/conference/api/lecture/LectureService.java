@@ -4,6 +4,7 @@ import conference.Conference;
 import conference.api.lecture.DTOs.LectureInfoDTO;
 import conference.api.lecture.DTOs.RegisterUserForLectureRequest;
 import conference.api.lecture.DTOs.ScheduleDTO;
+import conference.api.user.DTOs.UserLecturesPreviewDTO;
 import conference.api.user.User;
 import conference.api.user.UserRepository;
 import conference.api.user.UserService;
@@ -64,7 +65,7 @@ public class LectureService implements ILectureService {
     }
 
     @Override
-    public boolean registerUserForLecture(RegisterUserForLectureRequest request) {
+    public UserLecturesPreviewDTO registerUserForLecture(RegisterUserForLectureRequest request) {
         User user = userService.registerUser(request.getLogin(), request.getEmail());
         Lecture lecture = lectureRepository.findById(request.getLectureId());
 
@@ -86,10 +87,18 @@ public class LectureService implements ILectureService {
         }
 
         user.getLectures().add(lecture.getId());
-        userRepository.save(user);
+        user = userRepository.save(user);
         lectureRepository.addParticipantToLecture(lecture.getId(), user.getId());
         mailSender.sendRegisteredNotification(request.getEmail(), lecture);
 
-        return true;
+        UserLecturesPreviewDTO result = new UserLecturesPreviewDTO();
+        result.setEmail(user.getEmail());
+        result.setLogin(user.getLogin());
+        result.setLectures(user.getLectures().stream()
+                .map(lectureRepository::findById)
+                .map(LectureInfoDTO::new)
+                .collect(Collectors.toList()));
+
+        return result;
     }
 }

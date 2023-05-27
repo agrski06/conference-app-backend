@@ -3,6 +3,7 @@ package conference.api.lecture;
 import conference.api.lecture.DTOs.LectureInfoDTO;
 import conference.api.lecture.DTOs.RegisterUserForLectureRequest;
 import conference.api.lecture.DTOs.ScheduleDTO;
+import conference.api.user.DTOs.UserLecturesPreviewDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class LectureController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUserForLecture(@RequestBody RegisterUserForLectureRequest request) {
+    public ResponseEntity<UserLecturesPreviewDTO> registerUserForLecture(@RequestBody RegisterUserForLectureRequest request) {
         return ResponseEntity.ok(lectureService.registerUserForLecture(request));
     }
 
