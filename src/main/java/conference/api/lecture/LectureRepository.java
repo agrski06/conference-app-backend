@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -30,6 +31,12 @@ public class LectureRepository {
         conference.getLectures().stream()
                 .filter(lecture -> lecture.getId() == lectureId)
                 .forEach(lecture -> lecture.getParticipants().remove(userId));
+    }
+
+    public List<Lecture> findAllByTopic(Topic topic) {
+        return conference.getLectures().stream()
+                .filter(lecture -> lecture.getTopic().equals(topic))
+                .collect(Collectors.toList());
     }
 
     /**
