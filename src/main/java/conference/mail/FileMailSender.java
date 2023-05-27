@@ -1,7 +1,6 @@
 package conference.mail;
 
 import conference.api.lecture.Lecture;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -10,12 +9,24 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 @Component
-@RequiredArgsConstructor
 public class FileMailSender implements IMailSender {
+
+    private final File notifications;
+
+    public FileMailSender() {
+        notifications = new File("notifications.txt");
+        try {
+            if (notifications.exists()) {
+                notifications.delete();
+            }
+            notifications.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void sendRegisteredNotification(String email, Lecture lecture) {
-        File notifications = new File("notifications.txt");
         try {
             if (!notifications.exists()) {
                 notifications.createNewFile();

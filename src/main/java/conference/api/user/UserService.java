@@ -30,7 +30,12 @@ public class UserService implements IUserService {
             }
         }
 
-        if (userFoundByEmail.isPresent()) {
+        if (userFoundByEmail.isPresent() && userFoundByLogin.isPresent()) {
+            if (!userFoundByLogin.get().getLogin().equals(userFoundByEmail.get().getLogin()))
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+        }
+
+        if (userFoundByEmail.isPresent() && userFoundByLogin.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
         }
 
