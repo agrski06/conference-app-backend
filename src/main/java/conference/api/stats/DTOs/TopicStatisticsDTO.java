@@ -8,5 +8,5 @@ import java.util.Map;
 
 @Data
 public class TopicStatisticsDTO {
-    Map<Topic, Float> percentageOfInterestForTopics = new HashMap<>();
+    private Map<Topic, Float> percentageOfInterestForTopics = new HashMap<>();
 }

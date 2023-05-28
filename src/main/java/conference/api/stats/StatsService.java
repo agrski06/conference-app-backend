@@ -3,6 +3,7 @@ package conference.api.stats;
 import conference.api.lecture.Lecture;
 import conference.api.lecture.LectureRepository;
 import conference.api.lecture.Topic;
+import conference.api.stats.DTOs.LectureStatisticsDTO;
 import conference.api.stats.DTOs.TopicStatisticsDTO;
 import conference.api.user.User;
 import conference.api.user.UserRepository;
@@ -44,8 +45,27 @@ public class StatsService implements IStatsService {
         int numberOfUsers = users.size();
 
         usersInterestedInTopic.forEach((topic, longs)
-                -> result.getPercentageOfInterestForTopics().put(topic, (float) (longs.size() * 1.0 / numberOfUsers) * 100));
+                -> result.getPercentageOfInterestForTopics()
+                    .put(topic, (float) (longs.size() * 1.0 / numberOfUsers) * 100)
+        );
 
         return result;
+    }
+
+    @Override
+    public LectureStatisticsDTO statsForLecture() {
+        int numberOfUsers = userRepository.findAll().size();
+        List<Lecture> lectures = lectureRepository.findAll();
+        Map<String, Float> usersRegisteredForLecture = new HashMap<>();
+
+        lectures.forEach(lecture
+                -> usersRegisteredForLecture
+                .put(lecture.getName(),
+                        numberOfUsers != 0 ? (float) (lecture.getParticipants().size() * 100.0 / numberOfUsers) : 0)
+        );
+
+        LectureStatisticsDTO stats = new LectureStatisticsDTO();
+        stats.setPercentageOfInterestInLectures(usersRegisteredForLecture);
+        return stats;
     }
 }
