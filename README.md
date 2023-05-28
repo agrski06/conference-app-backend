@@ -24,7 +24,7 @@ This way, it is not needed to register first and only then booking the lecture
 ## Endpoints:
 **GET** `/api/v1/lecture/schedule` - shows schedule divided into three time blocks <br>
 Response:
-```json
+```json lines
 {
   "First block": [
     {
@@ -50,7 +50,7 @@ Response:
 
 **GET** `/api/v1/lecture/schedule/topics` - shows schedule grouped by topics <br>
 Response:
-```json
+```json lines
 {
   "schedule": {
     "FRONTEND": [
