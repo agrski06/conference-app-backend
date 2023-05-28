@@ -36,9 +36,6 @@ public class Conference {
         lectures.add(new Lecture(7L, "Indexing - what's that?", "Katarzyna Czyk", secondLectureStartDate, secondLectureEndDate, Topic.DATABASE));
         lectures.add(new Lecture(8L, "Advanced SQL", "Jan Kowalski", thirdLectureStartDate, thirdLectureEndDate, Topic.DATABASE));
 
-        lectures.add(new Lecture(9L, "Infrastructure as code", "Adam Nowak", firstLectureStartDate, firstLectureEndDate, Topic.DEVOPS));
-        lectures.add(new Lecture(10L, "Preventing security vulnerabilities", "John Smith", secondLectureStartDate, secondLectureEndDate, Topic.DEVOPS));
-        lectures.add(new Lecture(11L, "Optimized toolchains", "Anna Nowak", thirdLectureStartDate, thirdLectureEndDate, Topic.DEVOPS));
     }
 
 }
