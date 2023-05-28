@@ -3,6 +3,7 @@ package conference.api.lecture;
 import conference.Conference;
 import conference.api.lecture.DTOs.LectureInfoDTO;
 import conference.api.lecture.DTOs.RegisterUserForLectureRequest;
+import conference.api.lecture.DTOs.ScheduleByTopicsDTO;
 import conference.api.lecture.DTOs.ScheduleDTO;
 import conference.api.user.DTOs.UserLecturesPreviewDTO;
 import conference.api.user.User;
@@ -48,6 +49,32 @@ public class LectureService implements ILectureService {
         });
 
         return new ScheduleDTO(firstBlock, secondBlock, thirdBlock);
+    }
+
+    @Override
+    public ScheduleByTopicsDTO getScheduleByTopics() {
+        ScheduleByTopicsDTO result = new ScheduleByTopicsDTO();
+        List<Lecture> lectures = lectureRepository.findAll();
+
+        lectures.forEach(lecture -> {
+            Set<LectureInfoDTO> lecturesDTOs;
+            if (result.getSchedule().containsKey(lecture.getTopic())) {
+                lecturesDTOs = result.getSchedule().get(lecture.getTopic());
+                lecturesDTOs.add(new LectureInfoDTO(lecture));
+            } else {
+                lecturesDTOs = new HashSet<>(Set.of(new LectureInfoDTO(lecture)));
+            }
+            result.getSchedule().put(lecture.getTopic(), lecturesDTOs);
+        });
+
+        // sort the sets from result by date
+        result.getSchedule().forEach((topic, lectureInfoDTOS) -> result.getSchedule().put(topic,
+            lectureInfoDTOS.stream()
+                    .sorted(Comparator.comparing(LectureInfoDTO::getStartDate))
+                    .collect(Collectors.toCollection(LinkedHashSet::new))
+        ));
+
+        return result;
     }
 
     @Override

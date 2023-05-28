@@ -2,6 +2,7 @@ package conference.api.lecture;
 
 import conference.api.lecture.DTOs.LectureInfoDTO;
 import conference.api.lecture.DTOs.RegisterUserForLectureRequest;
+import conference.api.lecture.DTOs.ScheduleByTopicsDTO;
 import conference.api.lecture.DTOs.ScheduleDTO;
 import conference.api.user.DTOs.UserLecturesPreviewDTO;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,11 @@ public class LectureController {
     @GetMapping("/schedule")
     public ResponseEntity<ScheduleDTO> getSchedule() {
         return ResponseEntity.ok(lectureService.getSchedule());
+    }
+
+    @GetMapping("/schedule/topics")
+    public ResponseEntity<ScheduleByTopicsDTO> getSchedulesByTopics() {
+        return ResponseEntity.ok(lectureService.getScheduleByTopics());
     }
 
     @GetMapping("/{login}")
