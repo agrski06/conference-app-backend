@@ -19,6 +19,9 @@ public class StatsService implements IStatsService {
     private final UserRepository userRepository;
     private final LectureRepository lectureRepository;
 
+    /**
+     * Produces interest in topics
+     */
     @Override
     public TopicStatisticsDTO statsForTopic() {
         List<User> users = userRepository.findAll();
@@ -52,6 +55,9 @@ public class StatsService implements IStatsService {
         return result;
     }
 
+    /**
+     * Produces interest in each lecture, expressed in percentage
+     */
     @Override
     public LectureStatisticsDTO statsForLecture() {
         int numberOfUsers = userRepository.findAll().size();

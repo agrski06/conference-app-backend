@@ -1,5 +1,6 @@
 package conference.api.lecture.DTOs;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import conference.api.lecture.Lecture;
 import conference.api.lecture.Topic;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,11 @@ public class LectureInfoDTO {
     long id;
     String name;
     String lecturer;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Timestamp startDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Timestamp endDate;
     Topic topic;
     int numberOfParticipants;
