@@ -12,6 +12,8 @@ You can run the project from your IDE of choice or using terminal: <br>
 ### Windows
 `mvnw.cmd clean install`, then `mvnw.cmd spring-boot:run`
 
+Postman collection used for testing is included in files.
+
 ---
 ## Notes:
 
