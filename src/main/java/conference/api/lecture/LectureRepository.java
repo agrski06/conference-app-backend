@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ public class LectureRepository {
         return conference.getLectures();
     }
 
-    public Lecture findById(long id) {
-        return conference.getLectures().stream().filter(lecture -> lecture.getId() == id).findFirst().get();
+    public Optional<Lecture> findById(long id) {
+        return conference.getLectures().stream().filter(lecture -> lecture.getId() == id).findFirst();
     }
 
     public void addParticipantToLecture(long lectureId, long userId) {

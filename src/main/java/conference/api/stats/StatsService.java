@@ -33,7 +33,7 @@ public class StatsService implements IStatsService {
 
         for (User user : users) {
             for (long lectureId : user.getLectures()) {
-                Lecture lecture = lectureRepository.findById(lectureId);
+                Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
                 if (usersInterestedInTopic.containsKey(lecture.getTopic())) {
                     HashSet<Long> usersInterested = usersInterestedInTopic.get(lecture.getTopic());
                     usersInterested.add(user.getId());

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.NoSuchElementException;
+
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -32,13 +34,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = UserNotFoundException.class)
     protected ResponseEntity<Object> handleUserNotFound(RuntimeException ex, WebRequest request) {
         String responseBody = "User with given login not found";
-        return handleExceptionInternal(ex, responseBody, new HttpHeaders(), HttpStatus.CONFLICT, request);
+        return handleExceptionInternal(ex, responseBody, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = NoSeatsLeftException.class)
     protected ResponseEntity<Object> handleNoSeatsLeft(RuntimeException ex, WebRequest request) {
         String responseBody = "Capacity of 5 participants reached";
-        return handleExceptionInternal(ex, responseBody, new HttpHeaders(), HttpStatus.CONFLICT, request);
+        return handleExceptionInternal(ex, responseBody, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
     @ExceptionHandler(value = OverlappingLecturesException.class)
@@ -57,5 +59,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     protected ResponseEntity<Object> handleUserNotRegisteredForThisLectureException(RuntimeException ex, WebRequest request) {
         String responseBody = "User is not registered for this lecture";
         return handleExceptionInternal(ex, responseBody, new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(value = NoSuchElementException.class)
+    protected ResponseEntity<Object> handleNoSuchElement(RuntimeException ex, WebRequest request) {
+        String responseBody = "Invalid id (maybe out of range?)";
+        return handleExceptionInternal(ex, responseBody, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 }

@@ -95,7 +95,7 @@ public class UserService implements IUserService {
             throw new UserNotFoundException();
         }
 
-        Lecture lecture = lectureRepository.findById(lectureId);
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
 
         if (user.get().getLectures().stream().noneMatch(userLecture -> Objects.equals(userLecture, lecture.getId()))) {
             throw new UserNotRegisteredForThisLectureException();

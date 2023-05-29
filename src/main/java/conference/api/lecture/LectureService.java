@@ -87,7 +87,7 @@ public class LectureService implements ILectureService {
 
         List<Lecture> lectures = new ArrayList<>();
         user.get().getLectures().forEach(lectureId
-                        -> lectures.add(lectureRepository.findById(lectureId)));
+                        -> lectures.add(lectureRepository.findById(lectureId).orElseThrow()));
 
         return lectures.stream().map(LectureInfoDTO::new).collect(Collectors.toList());
     }
@@ -95,7 +95,7 @@ public class LectureService implements ILectureService {
     @Override
     public UserLecturesPreviewDTO registerUserForLecture(RegisterUserForLectureRequest request) {
         User user = userService.registerUser(request.getLogin(), request.getEmail());
-        Lecture lecture = lectureRepository.findById(request.getLectureId());
+        Lecture lecture = lectureRepository.findById(request.getLectureId()).orElseThrow();
 
         // if user already registered to lecture
         if (user.getLectures().contains(request.getLectureId())) {
@@ -110,9 +110,8 @@ public class LectureService implements ILectureService {
         // check whether user is registered for another lecture at this time
         if (user.getLectures().stream()
                 .map(lectureRepository::findById)
-                .anyMatch(userLecture -> lectureRepository.areDatesOverlappingInclusive(userLecture, lecture))) {
+                .anyMatch(userLecture -> lectureRepository.areDatesOverlappingInclusive(userLecture.orElseThrow(), lecture))) {
             throw new OverlappingLecturesException();
-
         }
 
         user.getLectures().add(lecture.getId());
@@ -125,7 +124,7 @@ public class LectureService implements ILectureService {
         result.setLogin(user.getLogin());
         result.setLectures(user.getLectures().stream()
                 .map(lectureRepository::findById)
-                .map(LectureInfoDTO::new)
+                .map(lecture1 -> new LectureInfoDTO(lecture1.orElseThrow()))
                 .collect(Collectors.toList()));
 
         return result;
