@@ -1,6 +1,9 @@
 package conference.api.lecture;
 
 import conference.Conference;
+import conference.api.exceptions.NoSeatsLeftException;
+import conference.api.exceptions.OverlappingLecturesException;
+import conference.api.exceptions.UserAlreadyRegisteredForLectureException;
 import conference.api.lecture.DTOs.LectureInfoDTO;
 import conference.api.lecture.DTOs.RegisterUserForLectureRequest;
 import conference.api.lecture.DTOs.ScheduleByTopicsDTO;
@@ -11,9 +14,7 @@ import conference.api.user.UserRepository;
 import conference.api.user.UserService;
 import conference.mail.IMailSender;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -98,19 +99,20 @@ public class LectureService implements ILectureService {
 
         // if user already registered to lecture
         if (user.getLectures().contains(request.getLectureId())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already registered for this lecture");
+            throw new UserAlreadyRegisteredForLectureException();
         }
 
         // check capacity
         if (lecture.getParticipants().size() >= 5) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Capacity of 5 participants reached");
+            throw new NoSeatsLeftException();
         }
 
         // check whether user is registered for another lecture at this time
         if (user.getLectures().stream()
                 .map(lectureRepository::findById)
                 .anyMatch(userLecture -> lectureRepository.areDatesOverlappingInclusive(userLecture, lecture))) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "You are registered to another lecture at this time");
+            throw new OverlappingLecturesException();
+
         }
 
         user.getLectures().add(lecture.getId());

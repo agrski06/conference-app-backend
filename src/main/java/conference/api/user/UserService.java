@@ -1,14 +1,13 @@
 package conference.api.user;
 
+import conference.api.exceptions.*;
 import conference.api.lecture.Lecture;
 import conference.api.lecture.LectureRepository;
 import conference.api.user.DTOs.RegisterUserRequest;
 import conference.api.user.DTOs.UpdateUserRequest;
 import conference.api.user.DTOs.UserInfoDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -30,17 +29,17 @@ public class UserService implements IUserService {
 
         if (userFoundByLogin.isPresent()) {
             if (!userFoundByLogin.get().getEmail().equals(email.toLowerCase())) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Provided email doesn't match the login");
+                throw new LoginInUseException();
             }
         }
 
         if (userFoundByEmail.isPresent() && userFoundByLogin.isPresent()) {
             if (!userFoundByLogin.get().getLogin().equals(userFoundByEmail.get().getLogin()))
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+                throw new EmailInUseException();
         }
 
         if (userFoundByEmail.isPresent() && userFoundByLogin.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+            throw new EmailInUseException();
         }
 
         return userFoundByLogin.orElseGet(() -> new User(null, login, email.toLowerCase(), new ArrayList<>()));
@@ -54,12 +53,12 @@ public class UserService implements IUserService {
         // check if email is the same as in database
         if (userFoundByLogin.isPresent()) {
             if (userFoundByLogin.get().getEmail().equals(request.getEmail().toLowerCase()))
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "User already registered");
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Login already in use");
+                throw new UserExistsException();
+            throw new LoginInUseException();
         }
 
         if (userFoundByEmail.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+            throw new EmailInUseException();
         }
 
         User savedUser = userRepository.save(
@@ -74,12 +73,12 @@ public class UserService implements IUserService {
         Optional<User> userFoundByEmail = userRepository.findByEmail(request.getEmail().toLowerCase());
 
         if (userFoundByLogin.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with given login not found");
+            throw new UserNotFoundException();
         }
 
         if (userFoundByEmail.isPresent()) {
             if (!userFoundByEmail.get().getLogin().equals(userFoundByLogin.get().getLogin()))
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+                throw new EmailInUseException();
         }
 
         User updatedUser = userFoundByLogin.get();
@@ -93,13 +92,13 @@ public class UserService implements IUserService {
     public UserInfoDTO cancelReservationForLecture(long lectureId, String login) {
         Optional<User> user = userRepository.findByLogin(login);
         if (user.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            throw new UserNotFoundException();
         }
 
         Lecture lecture = lectureRepository.findById(lectureId);
 
         if (user.get().getLectures().stream().noneMatch(userLecture -> Objects.equals(userLecture, lecture.getId()))) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User is not registered for this lecture");
+            throw new UserNotRegisteredForThisLectureException();
         }
 
         user.get().getLectures().remove(lectureId);
